@@ -1,0 +1,34 @@
+---
+- name: Create temp directory for doing work in on target
+  command: mktemp -td openshift-monitor-app-create-ansible-XXXXXX
+  register: mktemp
+  changed_when: False
+
+- name: Copy files to temp directory
+  copy:
+    src: "{{ item }}"
+    dest: "{{ mktemp.stdout }}/{{ item }}"
+  with_items:
+  - monitor-app-create.yaml
+
+- name: Copy admin client config
+  command: >
+    cp {{ openshift.common.config_base }}/master/admin.kubeconfig {{ mktemp.stdout }}/admin.kubeconfig
+  changed_when: false
+
+- name: Apply the app template
+  shell: >
+    {{ openshift_client_binary }} process -f "{{ mktemp.stdout }}/{{ item }}"
+    --param IMAGE="{{ openshift_monitor_app_create_image }}"
+    --param RUN_INTERVAL="{{ openshift_monitor_app_create_run_interval }}"
+    --param TIMEOUT="{{ openshift_monitor_app_create_timeout }}"
+    --param LOG_LEVEL="{{ openshift_monitor_app_create_log_level }}"
+    | {{ openshift_client_binary }} apply --config={{ mktemp.stdout }}/admin.kubeconfig -f -
+  with_items:
+  - monitor-app-create.yaml
+
+- name: Delete temp directory
+  file:
+    name: "{{ mktemp.stdout }}"
+    state: absent
+  changed_when: False
