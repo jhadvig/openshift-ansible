@@ -1,5 +1,7 @@
 # OpenShift Availability Monitoring
 
+### **NOTE: This component is unsupported in OCP at this time.**
+
 These are black box tests of several components which elable SLA verification by
 capturing metrics for SLIs. All of the tests in this role should be used to
 measure availability. Each test should expose metrics endpoints for scraping by
