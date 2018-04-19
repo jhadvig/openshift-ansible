@@ -6,3 +6,5 @@
     description: Openshift availability monitoring applications.
 
 - import_tasks: install_monitor_app_create.yaml
+
+- import_tasks: install_web_console_smoke_test.yaml

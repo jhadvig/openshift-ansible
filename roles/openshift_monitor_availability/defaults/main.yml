@@ -3,3 +3,6 @@ openshift_monitor_app_create_image: quay.io/redhat/openshift-monitor-project-lif
 openshift_monitor_app_create_run_interval: 5m
 openshift_monitor_app_create_timeout: 5m
 openshift_monitor_app_create_log_level: 0
+
+openshift_web_console_smoke_test_image: docker.io/benjaminapetersen/openshift-web-console-smoke-test:latest
+openshift_web_console_smoke_test_test_interval_minutes: 5
